@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { startTransition, useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate, Link } from "react-router-dom"
 
@@ -8,27 +8,25 @@ function Login() {
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+    const [name,setName]=useState('')
 
     async function submit(e){
         e.preventDefault();
 
         try{
 
-            await axios.post("http://localhost:8000/signup",{
-                email,password
+           const response= await axios.post("http://localhost:8000/signup",{
+               name, email,password
             })
-            .then(res=>{
-                if(res.data=="exist"){
-                    alert("User already exists")
-                }
-                else if(res.data=="notexist"){
-                    history("/home",{state:{id:email}})
-                }
-            })
-            .catch(e=>{
-                alert("wrong details")
-                console.log(e);
-            })
+            if(response.data.status==="error"){
+                alert("error")
+            }else{
+                window.location.href="/"
+                console.log("registered")
+            }
+            
+            
+            
 
         }
         catch(e){
@@ -40,11 +38,12 @@ function Login() {
 
 
     return (
-        <div className="login">
+        <div className="signup">
 
             <h1>Signup</h1>
 
             <form action="POST">
+            <input type="text" onChange={(e) => { setName(e.target.value) }} placeholder="Name"  />
                 <input type="email" onChange={(e) => { setEmail(e.target.value) }} placeholder="Email"  />
                 <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" />
                 <input type="submit" onClick={submit} />

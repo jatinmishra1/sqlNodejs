@@ -1,24 +1,17 @@
-const mongoose=require("mongoose")
-mongoose.connect("mongodb://0.0.0.0:27017/react-login-tut")
-.then(()=>{
-    console.log("mongodb connected");
-})
-.catch(()=>{
-    console.log('failed');
-})
 
 
-const newSchema=new mongoose.Schema({
-    email:{
-        type:String,
-        required:true
-    },
-    password:{
-        type:String,
-        required:true
-    }
-})
 
-const collection = mongoose.model("collection",newSchema)
-
-module.exports=collection
+const mysql = require("mysql2");
+  
+let db_con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: 'password',
+    database: "crud_database",
+});
+db_con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
+  
+module.exports = db_con;

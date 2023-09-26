@@ -10,16 +10,26 @@ function Login() {
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
 
+  
     async function submit(e){
         e.preventDefault();
-
         try{
 
             await axios.post("http://localhost:8000/",{
                 email,password
             })
             .then(res=>{
-                if(res.data=="exist"){
+               
+               
+                if(res.data){
+                    localStorage.clear();
+                    console.log(res.data)
+                  
+        localStorage.setItem('user-token', res.data.token);
+        localStorage.setItem('user-id',res.data.resp)
+        // setTimeout(() => {
+        //     navigate('/');
+        // }, 500);
                     history("/home",{state:{id:email}})
                 }
                 else if(res.data=="notexist"){
